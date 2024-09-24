@@ -19,4 +19,19 @@ class FavouriteProvider extends ChangeNotifier {
   bool isFavorite(ShowModel movie) {
     return _favoriteMovies.any((fav) => fav.id == movie.id); // Check using ID
   }
+
+  // Toggle method to add/remove movie from favorites
+  void toggleFavorite(ShowModel movie) {
+    if (isFavorite(movie)) {
+      removeFavorite(movie);
+    } else {
+      addFavorite(movie);
+    }
+  }
+
+  //clear the list
+  void clearFavourites() {
+    _favoriteMovies.clear();
+    notifyListeners();
+  }
 }

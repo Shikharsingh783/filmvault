@@ -1,5 +1,6 @@
 import 'package:filmvault/screen/home_screen.dart';
 import 'package:filmvault/screen/search_screen.dart';
+import 'package:filmvault/screen/wishList_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class _IndexScreenState extends State<IndexScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
+    WishlistScreen()
   ];
 
   // Handle bottom navigation tap
@@ -69,6 +71,17 @@ class _IndexScreenState extends State<IndexScreen> {
                     child: HugeIcon(
                       icon: HugeIcons.strokeRoundedSearch02,
                       color: _screenIndex == 1
+                          ? Colors.white
+                          : Colors.grey
+                              .shade700, // White for active, grey for inactive
+                      size: 30, // Slightly larger icon size
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => _onTabTapped(2),
+                    child: HugeIcon(
+                      icon: HugeIcons.strokeRoundedFavourite,
+                      color: _screenIndex == 2
                           ? Colors.white
                           : Colors.grey
                               .shade700, // White for active, grey for inactive
