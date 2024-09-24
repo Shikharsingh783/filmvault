@@ -194,7 +194,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Rating: ${movie.rating ?? "N/A"}',
+                                  'Rating: ${movie.rating}',
                                   style: const TextStyle(
                                     color: Colors.yellow,
                                     fontSize: 14,
