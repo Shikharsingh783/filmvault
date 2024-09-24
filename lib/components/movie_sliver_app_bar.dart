@@ -1,7 +1,9 @@
 import 'package:filmvault/models/movie_model.dart';
 import 'package:filmvault/provider/favourite_provider.dart';
+import 'package:filmvault/screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'glass_snackbar.dart'; // Import your glass snackbar widget
 
 class MovieSliverAppBar extends StatefulWidget {
   final PageController pageController;
@@ -33,12 +35,12 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.transparent, // Color for the collapsed bar
+      backgroundColor: Colors.transparent,
       expandedHeight: 400,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          color: Colors.transparent, // Transparent color for expanded state
+          color: Colors.transparent,
           child: PageView.builder(
             controller: widget.pageController,
             itemCount: widget.displayMovies.length,
@@ -66,20 +68,36 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                           borderRadius: BorderRadius.circular(16),
                           child: Stack(
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: movie.imageUrlOriginal != null
-                                        ? NetworkImage(movie.imageUrlOriginal!)
-                                        : const AssetImage(
-                                                'assets/placeholder.png')
-                                            as ImageProvider,
-                                    fit: BoxFit.cover,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => DetailScreen(
+                                              image: movie.imageUrlOriginal
+                                                  .toString(),
+                                              title: movie.name,
+                                              description: movie.summary,
+                                              rating: movie.rating,
+                                              genres: movie.genres,
+                                              ended: movie.ended,
+                                              premiered: movie.premiered,
+                                              displayMovie: movie)));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: movie.imageUrlOriginal != null
+                                          ? NetworkImage(
+                                              movie.imageUrlOriginal!)
+                                          : const AssetImage(
+                                                  'assets/placeholder.png')
+                                              as ImageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
-
-                              //gradient container
                               Positioned(
                                 bottom: 0,
                                 left: 0,
@@ -115,6 +133,7 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                               Positioned(
                                 bottom: 10,
                                 left: 45,
+                                // '${movie.name} removed from favorites!',
                                 child: GestureDetector(
                                   onTap: () {
                                     final favoritesProvider =
@@ -122,28 +141,22 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                             listen: false);
                                     if (isFavorite) {
                                       favoritesProvider.removeFavorite(movie);
+                                      final snackBar = GlassSnackBar(
+                                        text:
+                                            '${movie.name} removed from favorites!',
+                                      ).build();
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                          '${movie.name} removed from favorites!',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                        duration: const Duration(seconds: 2),
-                                      ));
+                                        ..hideCurrentSnackBar
+                                        ..showSnackBar(snackBar);
                                     } else {
                                       favoritesProvider.addFavorite(movie);
+                                      final snackBar = GlassSnackBar(
+                                        text:
+                                            '${movie.name} Added to favorites!',
+                                      ).build();
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                          '${movie.name} added to favorites!',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.green,
-                                        duration: const Duration(seconds: 2),
-                                      ));
+                                        ..hideCurrentSnackBar
+                                        ..showSnackBar(snackBar);
                                     }
                                     setState(() {});
                                   },

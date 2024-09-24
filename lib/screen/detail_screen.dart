@@ -1,6 +1,9 @@
 import 'package:filmvault/components/detail_card.dart';
+import 'package:filmvault/models/movie_model.dart';
+import 'package:filmvault/provider/favourite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
   final String image;
@@ -10,6 +13,7 @@ class DetailScreen extends StatefulWidget {
   final List<String> genres;
   final String ended;
   final String premiered;
+  final ShowModel displayMovie; // Change this to a single movie model
 
   const DetailScreen({
     Key? key,
@@ -20,6 +24,7 @@ class DetailScreen extends StatefulWidget {
     required this.genres,
     required this.ended,
     required this.premiered,
+    required this.displayMovie, // Changed here
   }) : super(key: key);
 
   @override
@@ -31,6 +36,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavouriteProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -75,17 +82,20 @@ class _DetailScreenState extends State<DetailScreen> {
                         textBaseline: TextBaseline.alphabetic,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          //name
-                          Text(
-                            widget.title,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          // Name
+                          SizedBox(
+                            width: 250,
+                            child: Text(
+                              overflow: TextOverflow.ellipsis,
+                              widget.title,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-
-                          //rating
+                          // Rating
                           Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: Row(
@@ -95,14 +105,16 @@ class _DetailScreenState extends State<DetailScreen> {
                                   style: TextStyle(
                                       fontSize: 17, color: Colors.grey),
                                 ),
-                                Text(widget.rating.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold))
+                                Text(
+                                  widget.rating.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -135,16 +147,12 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                       ),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
+                      const SizedBox(height: 20),
                       DetailCard(
                         genres: widget.genres,
                         ended: widget.ended,
                         premiered: widget.premiered,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -168,10 +176,39 @@ class _DetailScreenState extends State<DetailScreen> {
                   color: Colors.white.withOpacity(0.2),
                 ),
                 child: const Center(
-                    child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                )),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Favorite button positioned at the top right
+          Positioned(
+            top: 40,
+            right: 10,
+            child: GestureDetector(
+              onTap: () {
+                favoriteProvider.toggleFavorite(widget.displayMovie);
+              },
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.2),
+                ),
+                child: Center(
+                  child: Icon(
+                    favoriteProvider.isFavorite(widget.displayMovie)
+                        ? Icons.favorite // Filled heart if favorite
+                        : Icons
+                            .favorite_outline, // Outline heart if not favorite
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:filmvault/screen/index_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:filmvault/screen/index_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,56 +26,70 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Stylish logo or text representation
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey[850], // Dark grey for the circle background
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 20,
-                    offset: Offset(0, 10), // Shadow position
+      // Use a gradient or background image to mimic Netflix's style
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black, // Start with black
+              Colors.redAccent, // Add a Netflix-like red
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Netflix-like logo representation
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // Change to rectangle
+                  color: Colors.black, // Black background for logo
+                  border: Border.all(color: Colors.red, width: 3), // Red border
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 20,
+                      offset: Offset(0, 10), // Shadow position
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'FV',
+                  style: TextStyle(
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red.shade600,
+                    letterSpacing: 2,
                   ),
-                ],
-              ),
-              child: const Text(
-                'FV',
-                style: TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 2,
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            // App title
-            const Text(
-              'Film Vault',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                letterSpacing: 1.5,
+              const SizedBox(height: 20),
+              // App title with animation
+              const Text(
+                'Film Vault',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            // Tagline
-            Text(
-              'Your ultimate movie guide',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[400],
+              const SizedBox(height: 10),
+              // Tagline
+              Text(
+                'Your ultimate movie guide',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[400],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

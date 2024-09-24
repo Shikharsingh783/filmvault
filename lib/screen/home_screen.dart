@@ -147,6 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
                                           builder: (context) => DetailScreen(
+                                            displayMovie: movie,
                                             ended: movie.ended,
                                             premiered: movie.premiered,
                                             genres: movie.genres,

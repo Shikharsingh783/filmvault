@@ -1,8 +1,7 @@
-// ignore: file_names
+import 'dart:ui';
 import 'package:filmvault/provider/favourite_provider.dart'; // Import the FavouriteProvider
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui'; // Import for BackdropFilter
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -18,23 +17,19 @@ class _WishlistScreenState extends State<WishlistScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         actions: [
-          // Show the bin icon if the favoriteMovies list is not empty
           Consumer<FavouriteProvider>(
             builder: (context, favouriteProvider, child) {
               return favouriteProvider.favoriteMovies.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        // Handle bin icon press
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return Dialog(
-                              backgroundColor:
-                                  Colors.transparent, // Transparent background
+                              backgroundColor: Colors.transparent,
                               child: Stack(
                                 children: [
-                                  // BackdropFilter for glass effect
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12.0),
                                     child: BackdropFilter(
@@ -42,8 +37,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                           sigmaX: 10.0, sigmaY: 10.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(
-                                              0.1), // Semi-transparent background
+                                          color: Colors.white.withOpacity(0.1),
                                           borderRadius:
                                               BorderRadius.circular(12.0),
                                           border: Border.all(
@@ -81,8 +75,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                   onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
+                                                    Navigator.of(context).pop();
                                                   },
                                                 ),
                                                 TextButton(
@@ -90,11 +83,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                   onPressed: () {
-                                                    // Clear the wishlist
                                                     favouriteProvider
                                                         .clearFavourites();
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
+                                                    Navigator.of(context).pop();
                                                   },
                                                 ),
                                               ],
@@ -111,7 +102,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         );
                       },
                     )
-                  : const SizedBox(); // Empty widget if no favorites
+                  : const SizedBox();
             },
           ),
         ],
@@ -123,7 +114,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
         builder: (context, favouriteProvider, child) {
           final favoriteMovies = favouriteProvider.favoriteMovies;
 
-          // Check if there are no favorite movies
           if (favoriteMovies.isEmpty) {
             return const Center(
               child: Text(
@@ -133,18 +123,19 @@ class _WishlistScreenState extends State<WishlistScreen> {
             );
           }
 
-          // Use GridView to display favorite movies
           return GridView.builder(
             padding: const EdgeInsets.all(10.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Number of columns
-              childAspectRatio: 0.7, // Aspect ratio of each item
-              crossAxisSpacing: 10, // Horizontal spacing between items
-              mainAxisSpacing: 10, // Vertical spacing between items
+              crossAxisCount: 2,
+              childAspectRatio: 0.65, // Adjusted aspect ratio for better layout
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
             ),
             itemCount: favoriteMovies.length,
             itemBuilder: (context, index) {
               final movie = favoriteMovies[index];
+              bool isFavorite = favouriteProvider.isFavorite(movie);
+
               return GestureDetector(
                 onTap: () {
                   // Handle item tap (navigate to detail screen if needed)
@@ -153,31 +144,80 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   decoration: BoxDecoration(
                     color: Colors.grey[850],
                     borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: movie.imageUrlOriginal != null
-                          ? NetworkImage(movie.imageUrlOriginal!)
-                          : const AssetImage('assets/placeholder.png')
-                              as ImageProvider,
-                      fit: BoxFit.cover,
-                    ),
                   ),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        movie.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Image Display
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(12)),
+                            image: DecorationImage(
+                              image: movie.imageUrlOriginal != null
+                                  ? NetworkImage(movie.imageUrlOriginal!)
+                                  : const AssetImage('assets/placeholder.png')
+                                      as ImageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      // Movie Details Container
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(12)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Movie Name and Rating
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 120,
+                                  child: Text(
+                                    movie.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Rating: ${movie.rating ?? "N/A"}',
+                                  style: const TextStyle(
+                                    color: Colors.yellow,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Favorite Icon
+                            IconButton(
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isFavorite ? Colors.white : Colors.white,
+                              ),
+                              onPressed: () {
+                                favouriteProvider.toggleFavorite(movie);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
