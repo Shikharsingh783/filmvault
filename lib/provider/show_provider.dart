@@ -10,20 +10,26 @@ class ShowProvider extends ChangeNotifier {
   List<ShowModel> get movies => _movies;
   bool get isLoading => _isLoading;
 
-  Future<void> fetchMovies() async {
-    if (_movies.isNotEmpty) return; // Prevent fetching if already loaded
+  Future<List<ShowModel>> fetchMovies() async {
+    // Check if the movies list is already populated
+    if (_movies.isNotEmpty) return _movies;
 
     _isLoading = true;
-    notifyListeners(); // Notify listeners for loading state
+    notifyListeners(); // Notify listeners to show loading state
 
     try {
+      // Fetch movies from the service
       _movies = await _services.fetchMovies();
     } catch (e) {
-      // Handle errors as needed
+      // Handle the error if fetching fails
       _movies = [];
+      // Optionally: handle logging or showing error messages
     } finally {
       _isLoading = false;
-      notifyListeners(); // Notify listeners after fetching
+      notifyListeners(); // Notify listeners to update UI
     }
+
+    // Return the list of fetched movies
+    return _movies;
   }
 }
