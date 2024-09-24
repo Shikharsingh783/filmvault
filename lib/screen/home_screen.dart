@@ -75,13 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 // Top container for sliding posters
                 SizedBox(
-                  height: 250, // Increased height for better visibility
+                  height: 250,
                   width: MediaQuery.of(context).size.width,
                   child: PageView.builder(
                     controller: _pageController,
-                    onPageChanged: (int page) {
-                      // Track the current page if needed
-                    },
+                    onPageChanged: (int page) {},
                     itemCount: displayMovies.length,
                     itemBuilder: (context, index) {
                       final movie = displayMovies[index];
@@ -169,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => DetailScreen(
+                                  genres: movie.genres,
                                   image: movie.imageUrlOriginal!,
                                   title: movie.name,
                                   description: movie.summary,

@@ -6,6 +6,7 @@ class DetailScreen extends StatefulWidget {
   final String title;
   final String description;
   final double rating;
+  final List<String> genres;
 
   const DetailScreen({
     Key? key,
@@ -13,6 +14,7 @@ class DetailScreen extends StatefulWidget {
     required this.title,
     required this.description,
     required this.rating,
+    required this.genres,
   }) : super(key: key);
 
   @override
@@ -132,7 +134,9 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: 20,
                       ),
 
-                      DetailCard()
+                      DetailCard(
+                        genres: widget.genres,
+                      )
                     ],
                   ),
                 ),
