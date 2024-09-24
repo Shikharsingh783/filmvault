@@ -1,5 +1,5 @@
 import 'package:filmvault/models/movie_model.dart';
-import 'package:filmvault/services/movie_services.dart';
+import 'package:filmvault/services/show_services.dart';
 import 'package:flutter/material.dart';
 
 class ShowProvider extends ChangeNotifier {

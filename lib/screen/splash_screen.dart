@@ -9,12 +9,28 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
+    // Set up the animation controller
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
+
+    // Navigate to the IndexScreen after a delay
     Timer(
-      const Duration(seconds: 1), // Duration of the splash screen
+      const Duration(seconds: 3), // Duration of the splash screen
       () => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const IndexScreen()),
@@ -24,59 +40,88 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image:
-                AssetImage('assets/splash_background.jpg'), // Background image
-            fit: BoxFit.cover,
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF1C1C1E), // Dark background
+              Color(0xFF2C2C2E), // Slightly lighter dark
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo (Replace with your actual logo asset)
-            Image.asset(
-              'assets/logo.png', // Your logo image
-              width: 150,
-              height: 150,
-            ),
-            const SizedBox(height: 20),
-            // App title or tagline
-            const Text(
-              'Film Vault',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.white, // Change text color as needed
-                shadows: [
-                  Shadow(
-                    blurRadius: 10.0,
-                    color: Colors.black54,
-                    offset: Offset(0.0, 0.0),
+        child: Center(
+          child: FadeTransition(
+            opacity: _animation,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo Placeholder
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.8),
+                        Colors.white.withOpacity(0.3),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Your ultimate movie guide',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontStyle: FontStyle.italic,
-                shadows: [
-                  Shadow(
-                    blurRadius: 10.0,
-                    color: Colors.black54,
-                    offset: Offset(0.0, 0.0),
+                  child: const Icon(
+                    Icons.movie,
+                    size: 80,
+                    color: Colors.black,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+                // App title
+                const Text(
+                  'Film Vault',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black54,
+                        offset: Offset(0.0, 0.0),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Your ultimate movie guide',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black54,
+                        offset: Offset(0.0, 0.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
