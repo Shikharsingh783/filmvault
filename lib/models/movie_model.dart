@@ -4,7 +4,8 @@ class MovieModel {
   final String language;
   final String summary;
   final String status;
-  final String imageUrl;
+  final String? imageUrlMedium;
+  final String? imageUrlOriginal;
   final List<String> genres;
 
   MovieModel({
@@ -13,7 +14,21 @@ class MovieModel {
     required this.language,
     required this.summary,
     required this.status,
-    required this.imageUrl,
+    this.imageUrlMedium, // Handle nullable image URL
+    this.imageUrlOriginal, // Handle nullable image URL
     required this.genres,
   });
+
+  factory MovieModel.fromJson(Map<String, dynamic> json) {
+    return MovieModel(
+      name: json['name'],
+      url: json['url'],
+      language: json['language'],
+      summary: json['summary'],
+      status: json['status'],
+      imageUrlMedium: json['image']?['medium'],
+      imageUrlOriginal: json['image']?['original'],
+      genres: List<String>.from(json['genres']),
+    );
+  }
 }
