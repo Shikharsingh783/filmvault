@@ -9,8 +9,12 @@ class ShowModel {
   final String? imageUrlMedium;
   final String? imageUrlOriginal;
   final List<String> genres;
+  final String premiered;
+  final String ended;
 
   ShowModel({
+    required this.premiered,
+    required this.ended,
     required this.id,
     required this.name,
     required this.rating,
@@ -34,6 +38,8 @@ class ShowModel {
     return ShowModel(
       id: json['id'],
       name: json['name'],
+      ended: json['ended'] ?? 'N/A',
+      premiered: json['premiered'] ?? 'N/A',
       rating: json['rating']?['average']?.toDouble() ?? 0,
       url: json['url'] ?? '',
       language: json['language'] ?? 'Unknown',

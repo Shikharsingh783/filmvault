@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:filmvault/provider/favourite_provider.dart'; // Import the FavouriteProvider
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

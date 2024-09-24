@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 
 class DetailCard extends StatelessWidget {
   final List<String> genres;
-  const DetailCard({super.key, required this.genres});
+  final String ended;
+  final String premiered;
+  const DetailCard({
+    super.key,
+    required this.genres,
+    required this.ended,
+    required this.premiered,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +39,7 @@ class DetailCard extends StatelessWidget {
             ),
             // Content on top of the blur effect
             Container(
-              height: 200,
+              height: 220,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -72,6 +79,60 @@ class DetailCard extends StatelessWidget {
                     indent: 10,
                     endIndent: 10,
                   ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  //2nd
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Premiered',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        premiered,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(
+                    color: Colors.white54,
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+
+                  // 3rd
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Ended',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        ended,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
