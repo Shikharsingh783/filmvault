@@ -38,8 +38,8 @@ class DetailCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 gradient: LinearGradient(
                   colors: [
-                    Colors.white.withOpacity(0.15),
-                    Colors.white.withOpacity(0.05),
+                    Colors.black.withOpacity(0.55),
+                    Colors.black.withOpacity(0.55),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

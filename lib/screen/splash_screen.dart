@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 3), // Duration of the splash screen
+      const Duration(seconds: 1), // Duration of the splash screen
       () => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const IndexScreen()),

@@ -1,8 +1,10 @@
-import 'dart:async'; // For Timer
+import 'dart:async';
+
+import 'package:filmvault/provider/show_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:filmvault/models/movie_model.dart';
 import 'package:filmvault/screen/detail_screen.dart';
-import 'package:filmvault/services/movie_services.dart';
-import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,16 +14,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<ShowModel>> movies;
-  ShowServices services = ShowServices();
-
   final PageController _pageController = PageController();
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    movies = services.fetchMovies();
+    // Fetch movies when the screen initializes
+    final movieProvider = Provider.of<ShowProvider>(context, listen: false);
+    movieProvider.fetchMovies();
 
     // Set up the timer to automatically switch between images every 5 seconds
     _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
@@ -47,23 +48,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1C1C1E), // Dark background color
-      body: FutureBuilder<List<ShowModel>>(
-        future: movies,
-        builder: (context, snapshot) {
+      body: Consumer<ShowProvider>(
+        builder: (context, movieProvider, child) {
           // Handle loading and error states
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (movieProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
+          } else if (movieProvider.movies.isEmpty) {
             return const Center(
-                child: Text('Error fetching movies.',
-                    style: TextStyle(color: Colors.white)));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-                child: Text('No movies found.',
-                    style: TextStyle(color: Colors.white)));
+              child: Text('No movies found.',
+                  style: TextStyle(color: Colors.white)),
+            );
           }
 
-          final List<ShowModel> moviesList = snapshot.data!;
+          final List<ShowModel> moviesList = movieProvider.movies;
           List<ShowModel> displayMovies = [
             moviesList.last, // Duplicate last
             ...moviesList,
@@ -79,7 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: PageView.builder(
                     controller: _pageController,
-                    onPageChanged: (int page) {},
                     itemCount: displayMovies.length,
                     itemBuilder: (context, index) {
                       final movie = displayMovies[index];
@@ -107,9 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
 
                 // Rest of the ListView
                 Expanded(
@@ -152,16 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  movie.status,
-                                  style: const TextStyle(
-                                      color: Colors.grey), // Subtitle color
-                                ), // Display movie status
-                                Text(
-                                  'Genres: ${movie.genres.join(', ')}',
-                                  style: const TextStyle(
-                                      color: Colors.grey), // Subtitle color
-                                ), // Display genres
+                                Text(movie.status,
+                                    style: const TextStyle(
+                                        color: Colors
+                                            .grey)), // Display movie status
+                                Text('Genres: ${movie.genres.join(', ')}',
+                                    style: const TextStyle(
+                                        color: Colors.grey)), // Display genres
                               ],
                             ),
                             onTap: () {

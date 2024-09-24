@@ -1,5 +1,6 @@
 import 'package:filmvault/components/detail_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DetailScreen extends StatefulWidget {
   final String image;
@@ -119,6 +120,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           setState(() {
                             isExpanded = !isExpanded; // Toggle expanded state
                           });
+                          HapticFeedback.selectionClick();
                         },
                         child: Text(
                           isExpanded ? "Read less" : "Read more",
