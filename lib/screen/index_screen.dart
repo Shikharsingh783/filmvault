@@ -42,7 +42,7 @@ class _IndexScreenState extends State<IndexScreen> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
                 borderRadius: const BorderRadius.only(
