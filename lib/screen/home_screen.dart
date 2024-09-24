@@ -1,4 +1,4 @@
-import 'package:filmvault/models/movie_model.dart';
+import 'package:filmvault/components/show_tile.dart';
 import 'package:filmvault/screen/detail_screen.dart';
 import 'package:filmvault/services/movie_services.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<MovieModel>> movies;
+  late Future<List<ShowModel>> movies;
   ShowServices services = ShowServices();
 
   @override
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontFamily: 'Cascadia'),
         ),
       ),
-      body: FutureBuilder<List<MovieModel>>(
+      body: FutureBuilder<List<ShowModel>>(
         future: movies,
         builder: (context, snapshot) {
           // Handle loading and error states
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           // If data is available, render the ListView
-          final List<MovieModel> movies = snapshot.data!;
+          final List<ShowModel> movies = snapshot.data!;
 
           return ListView.builder(
             itemCount: movies.length,
@@ -73,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             image: movie.imageUrlOriginal!,
                             title: movie.name,
                             description: movie.summary,
+                            rating: movie.rating,
                           )));
                 },
               );

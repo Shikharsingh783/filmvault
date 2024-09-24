@@ -7,9 +7,11 @@ class MovieModel {
   final String? imageUrlMedium;
   final String? imageUrlOriginal;
   final List<String> genres;
+  final double rating;
 
   MovieModel({
     required this.name,
+    required this.rating,
     required this.url,
     required this.language,
     required this.summary,
@@ -22,6 +24,7 @@ class MovieModel {
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(
       name: json['name'],
+      rating: json['rating']['average'],
       url: json['url'],
       language: json['language'],
       summary: json['summary'],
