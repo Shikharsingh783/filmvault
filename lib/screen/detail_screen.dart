@@ -1,3 +1,4 @@
+import 'package:filmvault/components/detail_card.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -65,7 +66,9 @@ class _DetailScreenState extends State<DetailScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          //name
                           Text(
                             widget.title,
                             style: const TextStyle(
@@ -74,12 +77,24 @@ class _DetailScreenState extends State<DetailScreen> {
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(
-                            width: 60,
-                          ),
-                          Text(
-                            'Rating: ${widget.rating}',
-                            style: TextStyle(fontSize: 17, color: Colors.grey),
+
+                          //rating
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Row(
+                              children: [
+                                const Text(
+                                  'Rating: ',
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.grey),
+                                ),
+                                Text(widget.rating.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold))
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -112,12 +127,19 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                       ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      DetailCard()
                     ],
                   ),
                 ),
               ],
             ),
           ),
+
           // Back button positioned at the top
           Positioned(
             top: 40,
@@ -131,7 +153,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 width: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withOpacity(0.2),
                 ),
                 child: const Center(
                     child: Icon(

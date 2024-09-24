@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:filmvault/components/show_tile.dart';
+import 'package:filmvault/models/movie_model.dart';
 import 'package:http/http.dart' as http;
 
 class ShowServices {
