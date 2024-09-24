@@ -1,4 +1,5 @@
 class ShowModel {
+  final int id;
   final String name;
   final double rating;
   final String url;
@@ -10,6 +11,7 @@ class ShowModel {
   final List<String> genres;
 
   ShowModel({
+    required this.id,
     required this.name,
     required this.rating,
     required this.url,
@@ -30,6 +32,7 @@ class ShowModel {
 
   factory ShowModel.fromJson(Map<String, dynamic> json) {
     return ShowModel(
+      id: json['id'],
       name: json['name'],
       rating: json['rating']?['average']?.toDouble() ?? 0,
       url: json['url'] ?? '',
