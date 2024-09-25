@@ -2,7 +2,6 @@ import 'package:filmvault/screen/home_screen.dart';
 import 'package:filmvault/screen/search_screen.dart';
 import 'package:filmvault/screen/wishList_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:flutter/services.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -16,7 +15,7 @@ class _IndexScreenState extends State<IndexScreen> {
   // Index for screen
   int _screenIndex = 0;
 
-  // List of two screens: Home and Search
+  // List of three screens: Home, Search, and Wishlist
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
@@ -44,48 +43,78 @@ class _IndexScreenState extends State<IndexScreen> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
+                color: Colors.grey.shade900, // Dark background
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  // Home Icon + Label
                   GestureDetector(
                     onTap: () => _onTabTapped(0),
-                    child: HugeIcon(
-                      icon: HugeIcons.strokeRoundedHome09,
-                      color: _screenIndex == 0
-                          ? Colors.white
-                          : Colors.grey
-                              .shade700, // White for active, grey for inactive
-                      size: 30, // Slightly larger icon size
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.home,
+                          color: _screenIndex == 0 ? Colors.red : Colors.grey,
+                          size: 30,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          'Home',
+                          style: TextStyle(
+                            color: _screenIndex == 0 ? Colors.red : Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
+                  // Search Icon + Label
                   GestureDetector(
                     onTap: () => _onTabTapped(1),
-                    child: HugeIcon(
-                      icon: HugeIcons.strokeRoundedSearch02,
-                      color: _screenIndex == 1
-                          ? Colors.white
-                          : Colors.grey
-                              .shade700, // White for active, grey for inactive
-                      size: 30, // Slightly larger icon size
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: _screenIndex == 1 ? Colors.red : Colors.grey,
+                          size: 30,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          'Search',
+                          style: TextStyle(
+                            color: _screenIndex == 1 ? Colors.red : Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
+                  // Wishlist Icon (Center, Larger Icon)
                   GestureDetector(
                     onTap: () => _onTabTapped(2),
-                    child: HugeIcon(
-                      icon: HugeIcons.strokeRoundedFavourite,
-                      color: _screenIndex == 2
-                          ? Colors.white
-                          : Colors.grey
-                              .shade700, // White for active, grey for inactive
-                      size: 30, // Slightly larger icon size
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: _screenIndex == 2 ? Colors.red : Colors.grey,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          'Wishlist',
+                          style: TextStyle(
+                            color: _screenIndex == 2 ? Colors.red : Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

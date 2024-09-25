@@ -1,4 +1,5 @@
 import 'package:filmvault/provider/favourite_provider.dart';
+import 'package:filmvault/provider/search_provider.dart';
 import 'package:filmvault/provider/show_provider.dart';
 import 'package:filmvault/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) => FavouriteProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => SearchProvider(),
       )
     ],
     child: const MyApp(),

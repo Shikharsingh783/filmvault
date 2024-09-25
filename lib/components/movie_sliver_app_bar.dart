@@ -3,7 +3,8 @@ import 'package:filmvault/provider/favourite_provider.dart';
 import 'package:filmvault/screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'glass_snackbar.dart'; // Import your glass snackbar widget
+import 'glass_snackbar.dart';
+import 'package:flutter/services.dart';
 
 class MovieSliverAppBar extends StatefulWidget {
   final PageController pageController;
@@ -21,6 +22,7 @@ class MovieSliverAppBar extends StatefulWidget {
 
 class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
   double _currentPage = 0;
+  double _scrollOffset = 0;
 
   @override
   void initState() {
@@ -28,6 +30,7 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
     widget.pageController.addListener(() {
       setState(() {
         _currentPage = widget.pageController.page ?? 0;
+        _scrollOffset = widget.pageController.offset; // Update scroll offset
       });
     });
   }
@@ -137,9 +140,9 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                               Positioned(
                                 bottom: 10,
                                 left: 45,
-                                // '${movie.name} removed from favorites!',
                                 child: GestureDetector(
                                   onTap: () {
+                                    HapticFeedback.heavyImpact();
                                     final favoritesProvider =
                                         Provider.of<FavouriteProvider>(context,
                                             listen: false);
@@ -150,7 +153,7 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                             '${movie.name} removed from favorites!',
                                       ).build();
                                       ScaffoldMessenger.of(context)
-                                        ..hideCurrentSnackBar
+                                        ..hideCurrentSnackBar()
                                         ..showSnackBar(snackBar);
                                     } else {
                                       favoritesProvider.addFavorite(movie);
@@ -159,7 +162,7 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                             '${movie.name} Added to favorites!',
                                       ).build();
                                       ScaffoldMessenger.of(context)
-                                        ..hideCurrentSnackBar
+                                        ..hideCurrentSnackBar()
                                         ..showSnackBar(snackBar);
                                     }
                                   },
@@ -202,6 +205,21 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
           ),
         ),
       ),
+      // bottom: PreferredSize(
+      //   preferredSize: Size.fromHeight(40), // Height of the bottom widget
+      //   child: Container(
+      //     color: Colors.black54, // Background color of the bottom widget
+      //     child: Visibility(
+      //       visible: _scrollOffset >= 400, // Show when collapsed
+      //       child: const Center(
+      //         child: Text(
+      //           'Swipe down for more details',
+      //           style: TextStyle(color: Colors.red, fontSize: 16),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

@@ -151,6 +151,44 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                       ),
+
+                      //add to wishlist
+                      const SizedBox(height: 20),
+
+                      GestureDetector(
+                        onTap: () {
+                          HapticFeedback.heavyImpact();
+                          favoriteProvider.toggleFavorite(widget.displayMovie);
+                        },
+                        child: Container(
+                          height: 70,
+                          decoration: BoxDecoration(
+                              color: favoriteProvider
+                                      .isFavorite(widget.displayMovie)
+                                  ? const Color.fromARGB(255, 246, 35, 20)
+                                  : const Color.fromARGB(255, 244, 51, 51),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                              child: favoriteProvider
+                                      .isFavorite(widget.displayMovie)
+                                  ? const Text(
+                                      'Added To Wishlist',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : const Text(
+                                      'Add To Wishlist',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      //detial card
                       const SizedBox(height: 20),
                       DetailCard(
                         genres: widget.genres,
@@ -264,34 +302,6 @@ class _DetailScreenState extends State<DetailScreen> {
                 child: const Center(
                   child: Icon(
                     Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // Favorite button positioned at the top right
-          Positioned(
-            top: 40,
-            right: 10,
-            child: GestureDetector(
-              onTap: () {
-                favoriteProvider.toggleFavorite(widget.displayMovie);
-              },
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.2),
-                ),
-                child: Center(
-                  child: Icon(
-                    favoriteProvider.isFavorite(widget.displayMovie)
-                        ? Icons.favorite // Filled heart if favorite
-                        : Icons
-                            .favorite_outline, // Outline heart if not favorite
                     color: Colors.white,
                   ),
                 ),
