@@ -9,12 +9,70 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late List<Animation<double>> _fadeAnimations;
+  late List<Animation<double>> _scaleAnimations;
+
+  final String filmVaultText = "FilmVault"; // The text to animate
+
   @override
   void initState() {
     super.initState();
+
+    // Initialize the animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2), // Duration for the whole animation
+    );
+
+    // Generate staggered animations for each letter's fade and scale effect
+    _fadeAnimations = List.generate(filmVaultText.length, (index) {
+      return Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Interval(
+            index * 0.1, // Stagger fade animation for each letter
+            1.0,
+            curve: Curves.easeInOut,
+          ),
+        ),
+      );
+    });
+
+    // Modify the scale based on the position to give a curved effect
+    _scaleAnimations = List.generate(filmVaultText.length, (index) {
+      double scaleFactor;
+
+      // Adjust scale factor based on the position to create a curved effect
+      int centerIndex = filmVaultText.length ~/ 2;
+      if (index == centerIndex) {
+        scaleFactor = 1.1; // Center letter slightly larger
+      } else if (index < centerIndex) {
+        scaleFactor = 1.0 + (0.1 * (centerIndex - index)); // Left side larger
+      } else {
+        scaleFactor = 1.0 + (0.1 * (index - centerIndex)); // Right side larger
+      }
+
+      return Tween<double>(begin: 0.5, end: scaleFactor).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Interval(
+            index * 0.1, // Stagger scale animation for each letter
+            1.0,
+            curve: Curves.elasticOut, // Netflix-like elastic zoom effect
+          ),
+        ),
+      );
+    });
+
+    // Start the animation
+    _animationController.forward();
+
+    // Move to the next screen after 4 seconds
     Timer(
-      const Duration(seconds: 3), // Duration of the splash screen
+      const Duration(seconds: 4),
       () => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const IndexScreen()),
@@ -24,71 +82,59 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Use a gradient or background image to mimic Netflix's style
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.black, // Start with black
-              Colors.redAccent, // Add a Netflix-like red
+              Colors.black,
+              Colors.black,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Netflix-like logo representation
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle, // Change to rectangle
-                  color: Colors.black, // Black background for logo
-                  border: Border.all(color: Colors.red, width: 3), // Red border
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 20,
-                      offset: Offset(0, 10), // Shadow position
+          child: Row(
+            mainAxisSize: MainAxisSize.min, // Center the row horizontally
+            mainAxisAlignment: MainAxisAlignment.center, // Center the text
+            children: List.generate(filmVaultText.length, (index) {
+              return AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: _fadeAnimations[index].value, // Fade effect
+                    child: Transform.scale(
+                      scale: _scaleAnimations[index]
+                          .value, // Scale effect with curve
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal:
+                                5.0), // Increased padding for cleaner spacing
+                        child: Text(
+                          filmVaultText[index],
+                          style: const TextStyle(
+                            fontFamily: 'BebasNeue',
+                            fontSize: 70, // Font size remains large
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red, // Netflix-like red color
+                            letterSpacing:
+                                3.0, // Increased letter spacing for cleaner look
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-                child: Text(
-                  'FV',
-                  style: TextStyle(
-                    fontSize: 60,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red.shade600,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              // App title with animation
-              const Text(
-                'Film Vault',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              const SizedBox(height: 10),
-              // Tagline
-              Text(
-                'Your ultimate movie guide',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[400],
-                ),
-              ),
-            ],
+                  );
+                },
+              );
+            }),
           ),
         ),
       ),

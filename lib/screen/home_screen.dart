@@ -147,15 +147,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
                                           builder: (context) => DetailScreen(
-                                            displayMovie: movie,
-                                            ended: movie.ended,
-                                            premiered: movie.premiered,
-                                            genres: movie.genres,
-                                            image: movie.imageUrlOriginal!,
-                                            title: movie.name,
-                                            description: movie.summary,
-                                            rating: movie.rating,
-                                          ),
+                                              displayMovie: movie,
+                                              ended: movie.ended,
+                                              premiered: movie.premiered,
+                                              genres: movie.genres,
+                                              image: movie.imageUrlOriginal!,
+                                              title: movie.name,
+                                              description: movie.summary,
+                                              rating: movie.rating,
+                                              scheduleTime:
+                                                  movie.scheduleTime.toString(),
+                                              scheduleDays:
+                                                  movie.scheduleDays!),
                                         ));
                                       },
                                       child: ClipRRect(

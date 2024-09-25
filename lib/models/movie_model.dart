@@ -11,6 +11,8 @@ class ShowModel {
   final List<String> genres;
   final String premiered;
   final String ended;
+  final String? scheduleTime;
+  final List<String>? scheduleDays;
 
   ShowModel({
     required this.premiered,
@@ -25,6 +27,8 @@ class ShowModel {
     this.imageUrlMedium,
     this.imageUrlOriginal,
     required this.genres,
+    this.scheduleTime,
+    this.scheduleDays,
   });
 
   // Static method to remove HTML tags from a string
@@ -50,6 +54,10 @@ class ShowModel {
       imageUrlMedium: json['image']?['medium'],
       imageUrlOriginal: json['image']?['original'],
       genres: List<String>.from(json['genres']),
+      scheduleTime: json['schedule']['time'] ?? 'N/A',
+      scheduleDays: json['schedule']?['days'] != null
+          ? List<String>.from(json['schedule']['days']) // Fetch schedule days
+          : null,
     );
   }
 }

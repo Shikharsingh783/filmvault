@@ -82,7 +82,11 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                               genres: movie.genres,
                                               ended: movie.ended,
                                               premiered: movie.premiered,
-                                              displayMovie: movie)));
+                                              displayMovie: movie,
+                                              scheduleTime:
+                                                  movie.scheduleTime.toString(),
+                                              scheduleDays:
+                                                  movie.scheduleDays!)));
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -104,7 +108,7 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                 right: 0,
                                 child: Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.05,
+                                      MediaQuery.of(context).size.height * 0.2,
                                   decoration: const BoxDecoration(
                                     gradient: LinearGradient(
                                       begin: Alignment.bottomCenter,
@@ -158,7 +162,6 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                         ..hideCurrentSnackBar
                                         ..showSnackBar(snackBar);
                                     }
-                                    setState(() {});
                                   },
                                   child: Container(
                                     height: 45,
@@ -174,12 +177,14 @@ class _MovieSliverAppBarState extends State<MovieSliverAppBar> {
                                           ? const Text(
                                               'Added to List',
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
                                             )
                                           : const Text(
                                               'My List',
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                     ),
                                   ),

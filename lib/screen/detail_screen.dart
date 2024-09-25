@@ -13,7 +13,9 @@ class DetailScreen extends StatefulWidget {
   final List<String> genres;
   final String ended;
   final String premiered;
-  final ShowModel displayMovie; // Change this to a single movie model
+  final ShowModel displayMovie;
+  final String scheduleTime;
+  final List<String> scheduleDays;
 
   const DetailScreen({
     Key? key,
@@ -24,7 +26,9 @@ class DetailScreen extends StatefulWidget {
     required this.genres,
     required this.ended,
     required this.premiered,
-    required this.displayMovie, // Changed here
+    required this.displayMovie,
+    required this.scheduleTime,
+    required this.scheduleDays, // Changed here
   }) : super(key: key);
 
   @override
@@ -153,6 +157,88 @@ class _DetailScreenState extends State<DetailScreen> {
                         ended: widget.ended,
                         premiered: widget.premiered,
                       ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      //schdeule row
+                      // Schedule Row with better styling and icons
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 0),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[900], // Subtle background color
+                            borderRadius:
+                                BorderRadius.circular(8), // Rounded corners
+                          ),
+                          child: Row(
+                            children: [
+                              // Calendar Icon
+                              const Icon(
+                                Icons.calendar_today,
+                                color: Colors
+                                    .redAccent, // Netflix-style red accent
+                                size: 24,
+                              ),
+                              const SizedBox(width: 20),
+
+                              // Days Schedule
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Schedule',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Every ${widget.scheduleDays.join(', ')}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(width: 20),
+
+                              // Clock Icon
+                              const Icon(
+                                Icons.access_time,
+                                color: Colors
+                                    .redAccent, // Netflix-style red accent
+                                size: 24,
+                              ),
+                              const SizedBox(width: 10),
+
+                              // Time Schedule
+                              Text(
+                                widget.scheduleTime,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 50,
+                      )
                     ],
                   ),
                 ),
